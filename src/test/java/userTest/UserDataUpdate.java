@@ -9,16 +9,16 @@ import model.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import utils.UserGenerator;
+import setup.UserGen;
 import utils.UserNewDataGenerator;
 
 import static io.restassured.RestAssured.given;
 
 public class UserDataUpdate {
-    protected final UserGenerator generator = new UserGenerator();
+    protected final UserGen generator = new UserGen();
     protected final UserNewDataGenerator generatorMail = new UserNewDataGenerator();
     private final UserClient client = new UserClient();
-    private final Assertions check = new Assertions();
+    private final Assertions assertions = new Assertions();
     private String accessToken;
 
     @Before
@@ -27,7 +27,7 @@ public class UserDataUpdate {
     }
 
     @Test
-    @DisplayName("Обновление данных пользователя")
+    @DisplayName("Update user data")
     public void userDataUpdatedSuccessfully() {
         var user = generator.random();
         accessToken = client.createWithToken(user);
@@ -39,17 +39,17 @@ public class UserDataUpdate {
                 .body(userNewData)
                 .when()
                 .patch("/api/auth/user").then();
-        check.successIsTrue200(response);
+        assertions.successIsTrue(response);
     }
 
     @Test
-    @DisplayName("Обновление данных пользователя без авторизации")
+    @DisplayName("Update user data without authorization")
     public void userDataUpdateFailedWithoutAuthorization() {
         var user = generator.random();
         client.create(user);
         var userNewData = generatorMail.random();
         ValidatableResponse response = client.updateData(userNewData);
-        check.successIsFalse401(response);
+        assertions.successIsFalseUnauthorized(response);
     }
 
     @After

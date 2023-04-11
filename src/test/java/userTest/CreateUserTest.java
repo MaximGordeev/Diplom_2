@@ -39,7 +39,7 @@ public class CreateUserTest {
         accessToken = assertions.successIsFalseForbidden(response);
     }
     @Test
-    @DisplayName("Создание пользователя без почты")
+    @DisplayName("Created user without email")
     public void creationFailsWithoutEmail() {
         var user = gen.random();
         user.setEmail(null);
@@ -48,7 +48,7 @@ public class CreateUserTest {
     }
 
     @Test
-    @DisplayName("Создание пользователя без пароля")
+    @DisplayName("Created user without password")
     public void creationFailsWithoutPassword() {
         var user = gen.random();
         user.setPassword(null);
@@ -57,7 +57,7 @@ public class CreateUserTest {
     }
 
     @Test
-    @DisplayName("Создание уже существующего пользователя")
+    @DisplayName("Create existing user")
     public void existingUserCreationFails() {
         var user = gen.random();
         ValidatableResponse response = client.create(user);

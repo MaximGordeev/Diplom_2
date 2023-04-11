@@ -1,4 +1,4 @@
-package userTests;
+package userTest;
 
 import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
@@ -18,7 +18,7 @@ public class UserLoginTest {
     protected final UserGen generator = new UserGen();
 
     private final UserClient client = new UserClient();
-    private final Assertions check = new Assertions();
+    private final Assertions assertions = new Assertions();
     private String accessToken;
 
     @Before
@@ -27,24 +27,24 @@ public class UserLoginTest {
     }
 
     @Test
-    @DisplayName("Авторизация пользователя")
+    @DisplayName("User authorization")
     public void userLoggedInSuccessfully() {
         var user = generator.random();
         client.create(user);
         Credentials creds = Credentials.from(user);
         ValidatableResponse response = client.loginWithCreds(creds);
-        accessToken = check.successIsTrue200(response);
+        accessToken = assertions.successIsTrue(response);
     }
 
     @Test
-    @DisplayName("Авторизация пользователя с несуществующей почтой")
+    @DisplayName("User authorization with incorrect email")
     public void userWithFakeEmailLoggedInFailed() {
         var user = generator.random();
         client.create(user);
-        user.setEmail("sosiska@gmail.com");
+        user.setEmail("diplomzdavaysya@gmail.com");
         user.setPassword("1234");
         ValidatableResponse response = client.login(user);
-        accessToken = check.successIsFalse401(response);
+        accessToken = assertions.successIsFalseUnauthorized(response);
     }
 
     @After
