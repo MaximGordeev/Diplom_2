@@ -1,6 +1,7 @@
 package client;
 
 import com.fasterxml.jackson.databind.ser.impl.UnknownSerializer;
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
@@ -16,43 +17,49 @@ public class UserClient {
     private final String apiLogin = "/api/auth/login";
     private String accessToken;
 
+    @Step("Create user")
     public ValidatableResponse create(User user) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(user)
                 .when().post(apiRegister)
-                .then().log().all();
+                .then();
     }
+    @Step("Login user")
     public ValidatableResponse login(User user) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(user)
                 .when().post(apiLogin)
-                .then().log().all();
+                .then();
     }
+    @Step("Login with credentials")
     public ValidatableResponse loginWithCreds(Credentials creds) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(creds)
                 .when().post(apiLogin)
-                .then().log().all();
+                .then();
     }
+    @Step("Update user data")
     public ValidatableResponse updateData(NewUserData newUserData) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(newUserData)
                 .when().patch(apiUser)
-                .then().log().all();
+                .then();
     }
+    @Step("Create user with credentials")
     public ValidatableResponse createWithCreds(Credentials creds) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(creds)
                 .when().post(apiLogin)
-                .then().log().all();
+                .then();
     }
+    @Step("Create user with token")
     public String createWithToken(User user) {
-        return given().log().all()
+        return given()
                 .contentType(ContentType.JSON)
                 .and().body(user)
                 .when().post(apiRegister)
